@@ -1,12 +1,26 @@
 {
   "compilerOptions": {
-    "module": "CommonJS",
+    "module": "ES6",
+    "esModuleInterop": true,
     "moduleResolution": "node",
     "outDir": "dist",
-    "target": "ES2020",
+    "target": "ES6",
     "noEmitOnError": true,
-    "strict": true
+    "noImplicitAny": false,
+    "strict": true,
+    "sourceMap": true,
+    "allowJs": true,
+    "declaration": true,
+    "resolveJsonModule": true,
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "jsx": "preserve",
+    "allowSyntheticDefaultImports": true
+  },
+  "tsc-alias": {
+    "resolveFullPaths": true,
+    "verbose": false
   },
   "include": ["src/**/*"],
-  "exclude": ["**/*.spec.ts"]
+  "exclude": ["**/*.spec.ts", "node_modules"]
 }
