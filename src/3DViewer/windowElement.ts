@@ -12,7 +12,13 @@ class VWindowElement {
     document.body.appendChild(this.canvas);
   }
 
-  draw(): void {}
+  clear(): void {
+    this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
+  }
+
+  getContext(): CanvasRenderingContext2D {
+    return this.context;
+  }
 }
 
 export { VWindowElement };

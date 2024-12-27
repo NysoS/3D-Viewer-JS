@@ -21,6 +21,14 @@ class VWindow {
     this.windowElement = new VWindowElement(props.width, props.height);
   }
 
+  getContext(): CanvasRenderingContext2D {
+    return this.windowElement.getContext();
+  }
+
+  clear(): void {
+    this.windowElement.clear();
+  }
+
   render(): void {}
 }
 

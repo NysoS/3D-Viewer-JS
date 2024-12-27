@@ -16,7 +16,7 @@ function loop(): void {
   //Renderer
   application.render();
 
-  requestAnimationFrame(loop);
+  // requestAnimationFrame(loop);
 }
 
 loop();
