@@ -1,4 +1,4 @@
-import { Vector3D } from "./vector.js";
+import { Vector3D, Vector4D } from "./vector.js";
 
 class Mat4 {
   matrice: any[][] = [];
@@ -22,22 +22,19 @@ class Mat4 {
       [0, 0, 0, 1],
     ];
 
-    // mat.matrice[0][0] = 1;
-    // mat.matrice[1][1] = 1;
-    // mat.matrice[2][2] = 1;
-    // mat.matrice[3][3] = 1;
-
     return mat;
   }
 
   static projection(): Mat4 {
     let mat = this.identity();
 
-    mat.matrice[0][0] = 1 / ((800 / 700) * Math.tan(35));
-    mat.matrice[1][1] = 1 / Math.tan(35);
-    mat.matrice[2][2] = (0.1 + 100) / (0.1 - 100);
+    let fov = (70 / 180) * Math.PI;
+
+    mat.matrice[0][0] = 1 / ((800 / 700) * Math.tan(fov / 2));
+    mat.matrice[1][1] = 1 / Math.tan(fov / 2);
+    mat.matrice[2][2] = -(1 + 1000) / (1 - 1000);
     mat.matrice[3][2] = -1;
-    mat.matrice[2][3] = (2 * 0.1 * 100) / (0.1 - 100);
+    mat.matrice[2][3] = (2 * 1 * 1000) / (1 - 1000);
 
     return mat;
   }
@@ -57,7 +54,7 @@ class Mat4 {
     return mat;
   }
 
-  static multiplyVector(mat: Mat4, vect: Vector3D): Vector3D {
+  static multiplyVector3(mat: Mat4, vect: Vector3D): Vector3D {
     let vector = new Vector3D();
 
     vector.x =
@@ -76,9 +73,92 @@ class Mat4 {
       vect.z * mat.matrice[2][2] +
       mat.matrice[3][2];
 
-    console.log(vect, vector);
+    return vector;
+  }
+
+  static multiplyVector4(mat: Mat4, vect: Vector4D): Vector4D {
+    let vector = new Vector4D();
+
+    vector.x =
+      vect.x * mat.matrice[0][0] +
+      vect.y * mat.matrice[0][1] +
+      vect.z * mat.matrice[0][2] +
+      vect.w * mat.matrice[0][3];
+    vector.y =
+      vect.x * mat.matrice[1][0] +
+      vect.y * mat.matrice[1][1] +
+      vect.z * mat.matrice[1][2] +
+      vect.w * mat.matrice[1][3];
+    vector.z =
+      vect.x * mat.matrice[2][0] +
+      vect.y * mat.matrice[2][1] +
+      vect.z * mat.matrice[2][2] +
+      vect.w * mat.matrice[2][3];
+    vector.w =
+      vect.x * mat.matrice[3][0] +
+      vect.y * mat.matrice[3][1] +
+      vect.z * mat.matrice[3][2] +
+      vect.w * mat.matrice[3][3];
 
     return vector;
+  }
+
+  static translate(vect: Vector3D): Mat4 {
+    let mat = Mat4.identity();
+    console.log(mat);
+
+    mat.matrice[0][3] = vect.x;
+    mat.matrice[1][3] = vect.y;
+    mat.matrice[2][3] = vect.z;
+
+    return mat;
+  }
+
+  static rotationFromAxisY(angle: number): Mat4 {
+    let mat = Mat4.identity();
+    let rad = (angle * Math.PI) / 180;
+
+    mat.matrice[0][0] = Math.cos(rad);
+    mat.matrice[0][2] = -Math.sin(rad);
+    mat.matrice[2][0] = Math.sin(rad);
+    mat.matrice[2][2] = Math.cos(rad);
+
+    return mat;
+  }
+
+  static rotationFromAxisX(angle: number): Mat4 {
+    let mat = new Mat4();
+    let rad = (angle * Math.PI) / 180;
+
+    mat.matrice = [
+      [1, 0, 0, 0],
+      [0, Math.cos(rad), -Math.sin(rad), 0],
+      [0, Math.sin(rad), Math.cos(rad), 0],
+      [0, 0, 0, 1],
+    ];
+
+    return mat;
+  }
+
+  static rotationFromAxisZ(angle: number): Mat4 {
+    let mat = Mat4.identity();
+
+    let rad = (angle * Math.PI) / 180;
+
+    mat.matrice[0][0] = Math.cos(rad);
+    mat.matrice[0][1] = Math.sin(rad);
+    mat.matrice[1][0] = -Math.sin(rad);
+    mat.matrice[1][1] = Math.cos(rad);
+
+    return mat;
+  }
+
+  static rotation(rotation: Vector3D): Mat4 {
+    let mat = this.multiply(
+      Mat4.rotationFromAxisX(rotation.x),
+      Mat4.rotationFromAxisY(rotation.y)
+    );
+    return this.multiply(mat, Mat4.rotationFromAxisZ(rotation.z));
   }
 }
 

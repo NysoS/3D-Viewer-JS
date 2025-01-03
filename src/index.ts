@@ -8,15 +8,20 @@ const windowProps: VWindowProps = {
 };
 const application = new ViewerApplication(windowProps);
 
-function loop(): void {
+let lastTime: number = 0;
+
+function loop(currentTime: number): void {
+  const deltaTime = (currentTime - lastTime) / 1000;
+  lastTime = currentTime;
   //input
 
   //Update
+  application.update(deltaTime);
 
   //Renderer
   application.render();
 
-  // requestAnimationFrame(loop);
+  requestAnimationFrame(loop);
 }
 
-loop();
+requestAnimationFrame(loop);

@@ -11,12 +11,18 @@ class ViewerApplication {
     this.scene = new Scene("2D Viewer");
   }
 
+  update(deltaTime: number): void {
+    this.scene.update(deltaTime);
+  }
+
   render(): void {
     //Clear
-    console.log("Application render");
+    // console.log("Application render");
     this.window.clear();
     //Draw entities
-    this.scene.render(this.window.getContext());
+    if (this.window.getContext()) {
+      this.scene.render(this.window.getContext());
+    }
   }
 }
 

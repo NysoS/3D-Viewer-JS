@@ -1,4 +1,6 @@
 import { Mat4 } from "../Math/matrix.js";
+import { Vector3D, Vector4D } from "../Math/vector.js";
+import { Camera } from "./camera.js";
 import { Cube } from "./primitives/cube.js";
 
 class Scene {
@@ -9,6 +11,8 @@ class Scene {
   private cameraMatrix;
 
   private cube: Cube;
+  private camera: Camera;
+  private origin: Vector4D = new Vector4D();
 
   constructor(name: string) {
     this.name = name;
@@ -16,19 +20,57 @@ class Scene {
     this.viewportMatrix = Mat4.projection();
     this.cameraMatrix = Mat4.identity();
 
+    this.camera = new Camera();
+    this.camera.transformMat = Mat4.translate(new Vector3D(0, 0, -5));
     this.cube = new Cube();
   }
 
-  update(deltaTime: number): void {}
+  update(deltaTime: number): void {
+    this.cube.update(deltaTime);
+  }
 
   render(context: CanvasRenderingContext2D) {
     // this.gameObjects.forEach((object) => {
     //   object.draw(context);
     // });
 
-    let mat = Mat4.multiply(this.viewportMatrix, this.cameraMatrix); // * model = (transform * rotation * scale)
+    context.fillStyle = "blue";
 
-    this.cube.draw(context, mat);
+    // let mat = Mat4.multiply(this.viewportMatrix, this.camera.transformMat); // * model = (transform * rotation * scale)
+
+    // let gizmo = Mat4.multiplyVector4(mat, this.origin);
+
+    // context.beginPath();
+    // context.arc(
+    //   gizmo.x / gizmo.w,
+    //   gizmo.y / gizmo.w,
+    //   1 * Math.abs(gizmo.z),
+    //   0,
+    //   2 * Math.PI,
+    //   true
+    // );
+    // context.fill();
+
+    // context.fillStyle = "red";
+    // context.fillRect(gizmo.x / gizmo.w, gizmo.y / gizmo.w - 1, 100, 2);
+
+    // context.fillStyle = "green";
+    // context.fillRect(gizmo.x / gizmo.w, gizmo.y / gizmo.w - 1, 2, 100);
+
+    // context.fillStyle = "blue";
+    // context.fillRect(
+    //   gizmo.z / gizmo.w,
+    //   gizmo.z / gizmo.w - 1,
+    //   gizmo.x / gizmo.w,
+    //   gizmo.y / gizmo.w
+    // );
+
+    context.fillStyle = "blue";
+    context.beginPath();
+    context.arc(0, 0, 10, 0, 2 * Math.PI, true);
+    context.fill();
+
+    this.cube.draw(context, this.viewportMatrix, this.camera.transformMat);
 
     // context.fillStyle = "red";
     // context.strokeRect(4, 4, 27, 47);
