@@ -37,58 +37,7 @@ class Scene {
   }
 
   render() {
-    // this.gameObjects.forEach((object) => {
-    //   object.draw(context);
-    // });
-
-    // context.fillStyle = "blue";
-
-    // let mat = Mat4.multiply(this.viewportMatrix, this.camera.transformMat); // * model = (transform * rotation * scale)
-
-    // let gizmo = Mat4.multiplyVector4(mat, this.origin);
-
-    // context.beginPath();
-    // context.arc(
-    //   gizmo.x / gizmo.w,
-    //   gizmo.y / gizmo.w,
-    //   1 * Math.abs(gizmo.z),
-    //   0,
-    //   2 * Math.PI,
-    //   true
-    // );
-    // context.fill();
-
-    // context.fillStyle = "red";
-    // context.fillRect(gizmo.x / gizmo.w, gizmo.y / gizmo.w - 1, 100, 2);
-
-    // context.fillStyle = "green";
-    // context.fillRect(gizmo.x / gizmo.w, gizmo.y / gizmo.w - 1, 2, 100);
-
-    // context.fillStyle = "blue";
-    // context.fillRect(
-    //   gizmo.z / gizmo.w,
-    //   gizmo.z / gizmo.w - 1,
-    //   gizmo.x / gizmo.w,
-    //   gizmo.y / gizmo.w
-    // );
-
-    // context.fillStyle = "blue";
-    // context.beginPath();
-    // context.arc(0, 0, 10, 0, 2 * Math.PI, true);
-    // context.fill();
-
-    //context, this.viewportMatrix, this.camera.transformMat
-    // this.cube.draw(
-    //   this.renderer.context,
-    //   this.viewportMatrix,
-    //   this.camera.transformMat
-    // );
-
     GraphicsWrapper.draw(this.cube, this.renderer);
-
-    // context.fillStyle = "red";
-    // context.strokeRect(4, 4, 27, 47);
-    // context.fillRect(3, 3, 12, 21);
   }
 }
 
