@@ -1,3 +1,4 @@
+import { Transform } from "./transform.js";
 import { Vector3D, Vector4D } from "./vector.js";
 
 class Mat4 {
@@ -105,11 +106,10 @@ class Mat4 {
 
   static translate(vect: Vector3D): Mat4 {
     let mat = Mat4.identity();
-    console.log(mat);
 
     mat.matrice[0][3] = vect.x;
-    mat.matrice[1][3] = vect.y;
-    mat.matrice[2][3] = vect.z;
+    mat.matrice[1][3] = -vect.y;
+    mat.matrice[2][3] = -vect.z;
 
     return mat;
   }
@@ -159,6 +159,13 @@ class Mat4 {
       Mat4.rotationFromAxisY(rotation.y)
     );
     return this.multiply(mat, Mat4.rotationFromAxisZ(rotation.z));
+  }
+
+  static getModel(transform: Transform): Mat4 {
+    let translate = Mat4.translate(transform.position);
+    let rotation = Mat4.rotation(transform.rotation);
+
+    return Mat4.multiply(translate, rotation);
   }
 }
 
