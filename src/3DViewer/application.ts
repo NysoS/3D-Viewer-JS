@@ -1,3 +1,5 @@
+import { Vector3D } from "../Math/vector.js";
+import { MeshLoader } from "./core/Loader/meshLoader.js";
 import { Renderer } from "./Graphics/renderer.js";
 import { Scene } from "./scene.js";
 import { VWindow, VWindowProps } from "./window.js";
@@ -12,6 +14,12 @@ class ViewerApplication {
     this.window = new VWindow(windowProps);
     this.renderer = new Renderer(this.window.getContext());
     this.scene = new Scene("2D Viewer", this.renderer);
+
+    MeshLoader.loadFromObj("./resources/monkey.obj").then((mesh) => {
+      mesh.transform.position = new Vector3D(0, 0, 1);
+      mesh.transform.rotation.z = 180;
+      this.scene.addMesh(mesh);
+    });
   }
 
   update(deltaTime: number): void {

@@ -1,8 +1,9 @@
 import { Mat4 } from "../../Math/matrix.js";
 import { Transform } from "../../Math/transform.js";
+import { Vector3D } from "../../Math/vector.js";
 
 class Mesh {
-  protected vertexArray: any[] = [];
+  protected vertexArray: Vector3D[] = [];
   public transform: Transform = new Transform();
 
   protected transformMat: Mat4 = Mat4.identity();
@@ -12,6 +13,15 @@ class Mesh {
 
   getVertex(): any[] {
     return this.vertexArray;
+  }
+
+  setVertex(vertex: any[]): void {
+    this.vertexArray = vertex;
+  }
+
+  update(deltaTime: number): void {
+    // this.transform.rotation.x += deltaTime * 55;
+    this.transform.rotation.y += deltaTime * 35;
   }
 }
 

@@ -69,12 +69,14 @@ class GraphicsWrapper {
         continue;
       }
 
+      console.log(vertexShader.depth);
+
       context.fillStyle = vertexShader.color;
       context.beginPath();
       context.arc(
         vertexShader.position.x * 100,
         vertexShader.position.y * 100,
-        5 / Math.abs(vertexShader.depth),
+        2 / Math.abs(vertexShader.depth),
         0,
         2 * Math.PI,
         true
