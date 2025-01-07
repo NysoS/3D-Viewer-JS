@@ -13,7 +13,7 @@ class GraphicsWrapper {
   static draw(mesh: Mesh, renderer: Renderer) {
     let vertexShaders = this.vertexShader(mesh, renderer.projection);
 
-    this.rasterization(renderer.context, vertexShaders);
+    this.rasterization(renderer.context, vertexShaders, mesh.getIndices());
   }
 
   static vertexShader(mesh: Mesh, projection: Mat4): vertexShaderData[] {
@@ -39,7 +39,9 @@ class GraphicsWrapper {
         new Vector4D(vertex.x, vertex.y, vertex.z, 1)
       );
 
-      if (vertexPosition.w < 1) {
+      if (vertexPosition.w < 0.1) {
+        // vertexPosition.x = 1 - vertexPosition.x;
+        // vertexPosition.y = 1 - vertexPosition.y;
         continue;
       }
 
@@ -57,7 +59,8 @@ class GraphicsWrapper {
 
   static rasterization(
     context: CanvasRenderingContext2D,
-    vertexShaderData: vertexShaderData[]
+    vertexShaderData: vertexShaderData[],
+    faces: number[][]
   ): void {
     for (let i = 0; i < vertexShaderData.length; ++i) {
       let vertexShader: vertexShaderData = vertexShaderData[i];
@@ -71,15 +74,63 @@ class GraphicsWrapper {
 
       context.fillStyle = vertexShader.color;
       context.beginPath();
+      let pointSize = 1 / Math.abs(vertexShader.depth);
+
+      if (pointSize > 10) {
+        pointSize = 10;
+      }
+
       context.arc(
         vertexShader.position.x * 100,
         vertexShader.position.y * 100,
-        1 / Math.abs(vertexShader.depth),
+        pointSize,
         0,
         2 * Math.PI,
         true
       );
       context.fill();
+    }
+
+    for (let i = 0; i < faces.length; i++) {
+      context.beginPath();
+      let indices = faces[i];
+
+      let firstVertexShader: vertexShaderData = vertexShaderData[indices[0]];
+
+      if (!firstVertexShader || !firstVertexShader.position) {
+        return;
+      }
+
+      context.moveTo(
+        firstVertexShader.position?.x * 100,
+        firstVertexShader.position?.y * 100
+      );
+
+      for (let x = 1; x < indices.length; x++) {
+        let vertexShader: vertexShaderData = vertexShaderData[indices[x]];
+        if (!vertexShader) {
+          continue;
+        }
+
+        if (
+          !vertexShader.position ||
+          !vertexShader.depth ||
+          !vertexShader.color
+        ) {
+          continue;
+        }
+
+        context.lineTo(
+          vertexShader.position.x * 100,
+          vertexShader.position.y * 100
+        );
+      }
+
+      context.lineTo(
+        firstVertexShader.position.x * 100,
+        firstVertexShader.position.y * 100
+      );
+      context.stroke();
     }
   }
 }
