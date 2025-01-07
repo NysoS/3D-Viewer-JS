@@ -40,8 +40,6 @@ class GraphicsWrapper {
       );
 
       if (vertexPosition.w < 0.1) {
-        // vertexPosition.x = 1 - vertexPosition.x;
-        // vertexPosition.y = 1 - vertexPosition.y;
         continue;
       }
 

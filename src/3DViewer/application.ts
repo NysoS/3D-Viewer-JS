@@ -28,7 +28,6 @@ class ViewerApplication {
 
   render(): void {
     //Clear
-    // console.log("Application render");
     this.window.clear();
     //Draw entities
     if (this.window.getContext()) {

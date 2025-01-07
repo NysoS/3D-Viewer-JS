@@ -10,15 +10,6 @@ class Cube extends Mesh {
     this.transform.position = new Vector3D(0, 0, 2);
 
     this.vertexArray.push(
-      // new Vector3D(-1, -1, 1),
-      // new Vector3D(-1, 1, 1),
-      // new Vector3D(1, 1, 1),
-      // new Vector3D(1, -1, 1),
-
-      // new Vector3D(-1, -1, -1),
-      // new Vector3D(-1, 1, -1),
-      // new Vector3D(1, 1, -1),
-      // new Vector3D(1, -1, -1)
       new Vector3D(1, 1, -1),
       new Vector3D(1, -1, -1),
       new Vector3D(1, 1, 1),
