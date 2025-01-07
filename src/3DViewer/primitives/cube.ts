@@ -23,7 +23,7 @@ class Cube extends Mesh {
   }
 
   update(deltaTime: number): void {
-    this.transform.rotation.x += deltaTime * 45;
+    // this.transform.rotation.x += deltaTime * 45;
   }
 }
 

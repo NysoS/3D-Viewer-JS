@@ -2,8 +2,8 @@ import { ViewerApplication } from "./3DViewer/application.js";
 import { VWindowProps } from "./3DViewer/window.js";
 
 const windowProps: VWindowProps = {
-  width: 800,
-  height: 700,
+  width: 1200,
+  height: 675,
   title: "3D Viewer",
 };
 const application = new ViewerApplication(windowProps);

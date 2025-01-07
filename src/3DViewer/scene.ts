@@ -33,17 +33,17 @@ class Scene {
   }
 
   update(deltaTime: number): void {
-    // this.cube.update(deltaTime);
-    this.meshs.forEach((mesh) => {
-      mesh.update(deltaTime);
-    });
+    this.cube.update(deltaTime);
+    // this.meshs.forEach((mesh) => {
+    //   mesh.update(deltaTime);
+    // });
   }
 
   render() {
-    // GraphicsWrapper.draw(this.cube, this.renderer);
-    this.meshs.forEach((mesh) => {
-      GraphicsWrapper.draw(mesh, this.renderer);
-    });
+    GraphicsWrapper.draw(this.cube, this.renderer);
+    // this.meshs.forEach((mesh) => {
+    //   GraphicsWrapper.draw(mesh, this.renderer);
+    // });
   }
 
   addMesh(mesh: Mesh): void {

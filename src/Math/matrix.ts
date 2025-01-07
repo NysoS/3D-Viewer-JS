@@ -29,13 +29,13 @@ class Mat4 {
   static projection(): Mat4 {
     let mat = this.identity();
 
-    let fov = (70 / 180) * Math.PI;
+    let fov = (45 / 180) * Math.PI;
 
-    mat.matrice[0][0] = 1 / ((800 / 700) * Math.tan(fov / 2));
+    mat.matrice[0][0] = 1 / ((1200 / 675) * Math.tan(fov / 2));
     mat.matrice[1][1] = 1 / Math.tan(fov / 2);
-    mat.matrice[2][2] = -(1 + 1000) / (1 - 1000);
+    mat.matrice[2][2] = -(0.1 + 1000) / (0.1 - 1000);
     mat.matrice[3][2] = -1;
-    mat.matrice[2][3] = (2 * 1 * 1000) / (1 - 1000);
+    mat.matrice[2][3] = (2 * 0.1 * 1000) / (0.1 - 1000);
 
     return mat;
   }

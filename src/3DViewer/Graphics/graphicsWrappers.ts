@@ -39,7 +39,7 @@ class GraphicsWrapper {
         new Vector4D(vertex.x, vertex.y, vertex.z, 1)
       );
 
-      if (vertexPosition.w <= 0 || Math.abs(vertexPosition.w) < 1) {
+      if (vertexPosition.w < 1) {
         continue;
       }
 
@@ -69,14 +69,12 @@ class GraphicsWrapper {
         continue;
       }
 
-      console.log(vertexShader.depth);
-
       context.fillStyle = vertexShader.color;
       context.beginPath();
       context.arc(
         vertexShader.position.x * 100,
         vertexShader.position.y * 100,
-        2 / Math.abs(vertexShader.depth),
+        1 / Math.abs(vertexShader.depth),
         0,
         2 * Math.PI,
         true
