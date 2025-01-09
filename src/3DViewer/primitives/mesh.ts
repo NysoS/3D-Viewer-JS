@@ -8,7 +8,7 @@ class Mesh {
   public transform: Transform = new Transform();
 
   protected transformMat: Mat4 = Mat4.identity();
-  protected rotation: number = 0;
+  public rotationSpeed: Vector3D = new Vector3D();
 
   constructor() {}
 
@@ -29,8 +29,9 @@ class Mesh {
   }
 
   update(deltaTime: number): void {
-    // this.transform.rotation.x += deltaTime * 10;
-    this.transform.rotation.y += deltaTime * 35;
+    this.transform.rotation.x += deltaTime * this.rotationSpeed.x;
+    this.transform.rotation.y += deltaTime * this.rotationSpeed.y;
+    this.transform.rotation.z += deltaTime * this.rotationSpeed.z;
   }
 }
 

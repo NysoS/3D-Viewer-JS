@@ -29,6 +29,8 @@ class VWindow {
     this.windowElement.clear();
   }
 
+  poolEvents(): void {}
+
   render(): void {}
 }
 

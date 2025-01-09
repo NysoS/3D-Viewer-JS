@@ -4,13 +4,248 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>3D Viewer JS</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+      integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
   </head>
   <body>
     <script type="module" src="dist/index.js"></script>
     <style>
+      * {
+        margin: 0;
+        padding: 0;
+      }
       canvas {
-        background-color: #424141;
+        background-color: #5a666d;
+      }
+
+      .ui {
+        position: absolute;
+        /* transform: translateY(-50%); */
+        top: 50px;
+        color: rgb(221, 223, 223);
+      }
+
+      .ui .section {
+        border: solid 2px rgb(209, 111, 98);
+        margin: 20px 10px;
+        padding: 10px;
+        border-radius: 15px;
+        position: relative;
+      }
+
+      .ui input {
+        accent-color: rgb(209, 111, 98);
+      }
+
+      .ui .section span {
+        font-size: large;
+        position: absolute;
+        top: -15px;
+        background-color: #5a666d;
+        padding: 0 5px;
+        font-weight: bold;
+        font-style: italic;
+      }
+
+      .ui .section .input {
+        display: flex;
+        margin-bottom: 10px;
+        column-gap: 10px;
+      }
+
+      .ui .section .range {
+        flex-direction: column;
+      }
+
+      .info {
+        right: 0;
+        display: flex;
+        flex-direction: column;
+        padding: 0 10px;
+        font-size: larger;
+      }
+
+      .input-upload {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 250px;
+        height: 45px;
+        background-color: rgb(209, 111, 98);
+        border-radius: 16px;
+        box-shadow: 0 4px 4px 4px #3838384f;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        color: white;
+        font-size: larger;
+        font-family: "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;
+        gap: 12px;
+        line-height: 1;
+      }
+
+      .input-upload:hover {
+        cursor: pointer;
+      }
+
+      .input-upload[close="true"] {
+        display: none;
       }
     </style>
+
+    <input id="upload-file" type="file" name="model-3d" hidden="true" />
+    <div id="input-upload" class="input-upload">
+      <i class="fa-solid fa-cube"></i>
+      <span> Upload 3D model (.obj)</span>
+    </div>
+
+    <div class="ui">
+      <div class="section camera">
+        <span>Camera</span>
+        <div class="input range">
+          <label for="cam-pos-z">Z Axis</label>
+          <input
+            type="range"
+            min="-360"
+            max="360"
+            value="0"
+            class="slider"
+            id="cam-pos-z"
+          />
+        </div>
+
+        <div class="input range">
+          <label for="fov">FOV</label>
+          <input
+            type="range"
+            min="10"
+            max="120"
+            value="45"
+            class="slider"
+            id="fov"
+          />
+        </div>
+      </div>
+
+      <div class="section model">
+        <span>Model</span>
+        <div class="input range">
+          <label for="model-rot-x">Rot X</label>
+          <input
+            type="range"
+            min="-360"
+            max="360"
+            value="0"
+            class="slider"
+            id="model-rot-x"
+          />
+        </div>
+
+        <div class="input range">
+          <label for="model-rot-y">Rot Y</label>
+          <input
+            type="range"
+            min="-360"
+            max="360"
+            value="0"
+            class="slider"
+            id="model-rot-y"
+          />
+        </div>
+
+        <div class="input range">
+          <label for="model-rot-z">Rot Z</label>
+          <input
+            type="range"
+            min="-360"
+            max="360"
+            value="0"
+            class="slider"
+            id="model-rot-z"
+          />
+        </div>
+
+        <div class="input range">
+          <label for="model-speed-rot-x">Speed Rot X</label>
+          <input
+            type="range"
+            min="-360"
+            max="360"
+            value="0"
+            class="slider"
+            id="model-speed-rot-x"
+          />
+        </div>
+
+        <div class="input range">
+          <label for="model-speed-rot-y">Speed Rot Y</label>
+          <input
+            type="range"
+            min="-360"
+            max="360"
+            value="0"
+            class="slider"
+            id="model-speed-rot-y"
+          />
+        </div>
+
+        <div class="input range">
+          <label for="model-speed-rot-z">Speed Rot Z</label>
+          <input
+            type="range"
+            min="-360"
+            max="360"
+            value="0"
+            class="slider"
+            id="model-speed-rot-z"
+          />
+        </div>
+
+        <button id="model-reset">Reset model</button>
+      </div>
+
+      <div class="section render">
+        <span>Render</span>
+        <div class="input">
+          <label for="render-dot">Dot</label>
+          <input type="checkbox" checked="true" id="render-dot" />
+        </div>
+        <div class="input">
+          <label for="render-triangle">Triangle</label>
+          <input type="checkbox" checked="true" id="render-triangle" />
+        </div>
+      </div>
+
+      <div class="info">
+        <span id="info-vertice">0 Vertices</span>
+        <span id="info-triangle">0 Triangles</span>
+      </div>
+    </div>
+
+    <script>
+      document.getElementById("model-reset")?.addEventListener("click", () => {
+        document.getElementById("model-rot-x").value = 0;
+        document.getElementById("model-rot-y").value = 0;
+        document.getElementById("model-rot-z").value = 0;
+
+        document.getElementById("model-speed-rot-x").value = 0;
+        document.getElementById("model-speed-rot-y").value = 0;
+        document.getElementById("model-speed-rot-z").value = 0;
+      });
+
+      document.getElementById("input-upload").addEventListener("click", () => {
+        document.getElementById("upload-file").click();
+      });
+
+      document.getElementById("upload-file").addEventListener("change", () => {
+        document.getElementById("input-upload").setAttribute("close", true);
+      });
+    </script>
   </body>
 </html>

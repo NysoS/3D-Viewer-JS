@@ -8,7 +8,7 @@ class OBJParser {
           resolve(values.split("\n"));
         }
       };
-      rawFile.open("GET", filename, true);
+      rawFile.open("GET", filename, false);
       rawFile.send();
     });
   }

@@ -4,6 +4,7 @@ class VWindowElement {
 
   constructor(width: number, height: number) {
     this.canvas = document.createElement("canvas");
+    this.canvas.setAttribute("id", "render");
     this.canvas.width = width;
     this.canvas.height = height;
 

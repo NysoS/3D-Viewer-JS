@@ -10,6 +10,9 @@ type vertexShaderData = {
 };
 
 class GraphicsWrapper {
+  static DOT_RENDERER: boolean = true;
+  static TRIANGLES_RENDERER: boolean = true;
+
   static draw(mesh: Mesh, renderer: Renderer) {
     let vertexShaders = this.vertexShader(mesh, renderer.projection);
 
@@ -60,56 +63,9 @@ class GraphicsWrapper {
     vertexShaderData: vertexShaderData[],
     faces: number[][]
   ): void {
-    for (let i = 0; i < vertexShaderData.length; ++i) {
-      let vertexShader: vertexShaderData = vertexShaderData[i];
-      if (
-        !vertexShader.position ||
-        !vertexShader.depth ||
-        !vertexShader.color
-      ) {
-        continue;
-      }
-
-      context.fillStyle = vertexShader.color;
-      context.beginPath();
-      let pointSize = 1 / Math.abs(vertexShader.depth);
-
-      if (pointSize > 10) {
-        pointSize = 10;
-      }
-
-      context.arc(
-        vertexShader.position.x * 100,
-        vertexShader.position.y * 100,
-        pointSize,
-        0,
-        2 * Math.PI,
-        true
-      );
-      context.fill();
-    }
-
-    for (let i = 0; i < faces.length; i++) {
-      context.beginPath();
-      let indices = faces[i];
-
-      let firstVertexShader: vertexShaderData = vertexShaderData[indices[0]];
-
-      if (!firstVertexShader || !firstVertexShader.position) {
-        return;
-      }
-
-      context.moveTo(
-        firstVertexShader.position?.x * 100,
-        firstVertexShader.position?.y * 100
-      );
-
-      for (let x = 1; x < indices.length; x++) {
-        let vertexShader: vertexShaderData = vertexShaderData[indices[x]];
-        if (!vertexShader) {
-          continue;
-        }
-
+    if (GraphicsWrapper.DOT_RENDERER) {
+      for (let i = 0; i < vertexShaderData.length; ++i) {
+        let vertexShader: vertexShaderData = vertexShaderData[i];
         if (
           !vertexShader.position ||
           !vertexShader.depth ||
@@ -118,17 +74,68 @@ class GraphicsWrapper {
           continue;
         }
 
-        context.lineTo(
-          vertexShader.position.x * 100,
-          vertexShader.position.y * 100
-        );
-      }
+        context.fillStyle = vertexShader.color;
+        context.beginPath();
+        let pointSize = 1 / Math.abs(vertexShader.depth);
 
-      context.lineTo(
-        firstVertexShader.position.x * 100,
-        firstVertexShader.position.y * 100
-      );
-      context.stroke();
+        if (pointSize > 10) {
+          pointSize = 10;
+        }
+
+        context.arc(
+          vertexShader.position.x * 100,
+          vertexShader.position.y * 100,
+          pointSize,
+          0,
+          2 * Math.PI,
+          true
+        );
+        context.fill();
+      }
+    }
+
+    if (GraphicsWrapper.TRIANGLES_RENDERER) {
+      for (let i = 0; i < faces.length; i++) {
+        context.beginPath();
+        let indices = faces[i];
+
+        let firstVertexShader: vertexShaderData = vertexShaderData[indices[0]];
+
+        if (!firstVertexShader || !firstVertexShader.position) {
+          return;
+        }
+
+        context.moveTo(
+          firstVertexShader.position?.x * 100,
+          firstVertexShader.position?.y * 100
+        );
+
+        for (let x = 1; x < indices.length; x++) {
+          let vertexShader: vertexShaderData = vertexShaderData[indices[x]];
+          if (!vertexShader) {
+            continue;
+          }
+
+          if (
+            !vertexShader.position ||
+            !vertexShader.depth ||
+            !vertexShader.color
+          ) {
+            continue;
+          }
+
+          context.lineTo(
+            vertexShader.position.x * 100,
+            vertexShader.position.y * 100
+          );
+        }
+
+        context.lineTo(
+          firstVertexShader.position.x * 100,
+          firstVertexShader.position.y * 100
+        );
+        context.stroke();
+      }
     }
   }
 }
